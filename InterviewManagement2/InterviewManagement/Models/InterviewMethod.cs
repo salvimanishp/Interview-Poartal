@@ -15,48 +15,58 @@ namespace InterviewManagement.Models
 
         // insert Metrhod 
         public List<InterviewMaster> GetAllCandidate()
-{
-    List<InterviewMaster> lstCandidate = new List<InterviewMaster>();
-
-    using (SqlConnection con = new SqlConnection(cs))
-    {
-        SqlCommand cmd = new SqlCommand("UspGetCandidateData", con);
-        cmd.CommandType = CommandType.StoredProcedure;
-
-        SqlDataAdapter da = new SqlDataAdapter(cmd);
-        DataTable dt = new DataTable();
-
-        con.Open();
-        da.Fill(dt);
-        con.Close();
-
-        foreach (DataRow row in dt.Rows)
         {
-            InterviewMaster IM = new InterviewMaster();
-            IM.CompanyId = (long)row["CompanyId"];
-            IM.CompanyName = row["CompanyName"].ToString();
-            IM.CandidateId = (long)row["CandidateId"];
-            IM.FirstName = row["FirstName"].ToString();
-            IM.LastName = row["LastName"].ToString();
-            IM.Email = row["EmailId"].ToString();
-            IM.MobailNumber = row["MobileNo"].ToString();
-            IM.Address = row["AddressName"].ToString();
-            IM.DOB = (DateTime)row["DateOfBirth"];
-            IM.Age = row["Age"].ToString();
-            IM.Qualification = row["Qualification"].ToString();
-            IM.Skill = row["MasterSkills"].ToString();
-            IM.Experience = row["WorkExperience"].ToString();
-            IM.City = row["City"].ToString();
-            IM.Country = row["Country"].ToString();
-            IM.State = row["State"].ToString();
+            List<InterviewMaster> lstCandidate = new List<InterviewMaster>();
 
-            lstCandidate.Add(IM);
+            try
+            {
+                using (SqlConnection con = new SqlConnection(cs))
+                {
+                    SqlCommand cmd = new SqlCommand("UspGetCandidateData", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+
+                    con.Open();
+                    da.Fill(dt);
+                    
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        InterviewMaster IM = new InterviewMaster();
+                        IM.CompanyId = (long)row["CompanyId"];
+                        IM.CompanyName = row["CompanyName"].ToString();
+                        IM.CandidateId = (long)row["CandidateId"];
+                        IM.FirstName = row["FirstName"].ToString();
+                        IM.LastName = row["LastName"].ToString();
+                        IM.Email = row["EmailId"].ToString();
+                        IM.MobailNumber = row["MobileNo"].ToString();
+                        IM.Address = row["AddressName"].ToString();
+                        IM.DOB = (DateTime)row["DateOfBirth"];
+                        IM.Age = row["Age"].ToString();
+                        IM.Qualification = row["Qualification"].ToString();
+                        IM.Skill = row["MasterSkills"].ToString();
+                        IM.Experience = row["WorkExperience"].ToString();
+                        IM.City = row["City"].ToString();
+                        IM.Country = row["Country"].ToString();
+                        IM.State = row["State"].ToString();
+
+                        lstCandidate.Add(IM);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception, log it, or throw a custom exception.
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                // You might want to log the exception details or throw a custom exception.
+            }
+
+            return lstCandidate;
         }
-    }
-    return lstCandidate;
-}
 
-		public bool AddOrUpdateCandidate(InterviewMaster IM, out string errorMessage)
+
+        public bool AddOrUpdateCandidate(InterviewMaster IM, out string errorMessage)
 		{
 			try
 			{
